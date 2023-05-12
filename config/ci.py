@@ -12,16 +12,13 @@ def generate_img_tag(file):
 
 imgs = sorted(Path("./png").glob("*.png"))
 img_tags = [generate_img_tag(x) for x in imgs]
-line_number = 0
-
 # Read the template file
 with open(template_path, "r", encoding="UTF-8") as f:
     lines = f.readlines()
-# Find the line that starts with "<!-- ICONS -->"
-for line in lines:
-    if line.startswith("<!-- ICONS -->"):
-        line_number = lines.index(line)
-        break
+line_number = next(
+    (lines.index(line) for line in lines if line.startswith("<!-- ICONS -->")),
+    0,
+)
 # Insert the icons after the line
 lines.insert(line_number + 1, " ".join(img_tags))
 # Write the new file
